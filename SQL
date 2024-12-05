@@ -1,0 +1,337 @@
+PRAGMA foreign_keys = ON;
+
+-- Criação da tabela Hospede
+CREATE TABLE HOSPEDE (
+    CPF TEXT,
+    NOME TEXT,
+    EMAIL TEXT,
+    PRIMARY KEY (CPF)
+);
+
+-- Criação da tabela Tipo_Quarto
+CREATE TABLE TIPO_QUARTO(
+    COD INTEGER,
+    DESCRICAO TEXT,
+    CAPACIDADE INTEGER,
+    PRIMARY KEY(COD)
+);
+
+-- Criação da tabela Quarto
+CREATE TABLE QUARTO(
+    NUMERO_QUARTO INTEGER,
+    CODIGO INTEGER,
+    FOREIGN KEY (CODIGO) REFERENCES TIPO_QUARTO(COD) ON DELETE SET NULL ON UPDATE CASCADE,
+    PRIMARY KEY(NUMERO_QUARTO)
+);
+
+-- Criação da tabela Reserva
+CREATE TABLE RESERVA(
+    RESERVA_ID INTEGER,
+    HOSPEDE_CPF TEXT,
+    NUMERO_QUARTO INTEGER,
+    CHECKIN TEXT,
+    CHECKOUT TEXT,
+    VALOR INTEGER,
+    FOREIGN KEY (HOSPEDE_CPF) REFERENCES HOSPEDE(CPF) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (NUMERO_QUARTO) REFERENCES QUARTO(NUMERO_QUARTO) ON DELETE SET NULL ON UPDATE CASCADE,
+    PRIMARY KEY (RESERVA_ID)
+);
+
+-- Criação da tabela Funcionario
+CREATE TABLE FUNCIONARIO(
+    CPF_FUNCIONARIO TEXT,
+    NOME TEXT,
+    TURNO TEXT,
+    PRIMARY KEY (CPF_FUNCIONARIO)
+);
+
+-- Criação da tabela Recepcionista
+CREATE TABLE RECEPCIONISTA(
+    CPF_FUNCIONARIO TEXT,
+    TELEFONE TEXT,
+    FOREIGN KEY (CPF_FUNCIONARIO) REFERENCES FUNCIONARIO(CPF_FUNCIONARIO)
+);
+
+-- Criação da tabela Camareira
+CREATE TABLE CAMAREIRA(
+    CPF_FUNCIONARIO TEXT,
+    DESCRICAO_TAREFA TEXT,
+    DATA TEXT,
+    HORA TEXT,
+    FOREIGN KEY (CPF_FUNCIONARIO) REFERENCES FUNCIONARIO(CPF_FUNCIONARIO)
+);
+
+-- Criação da tabela Cozinheira
+CREATE TABLE COZINHEIRA(
+    CPF_FUNCIONARIO TEXT,
+    ESPECIALIDADE TEXT,
+    PRIMARY KEY (CPF_FUNCIONARIO),
+    FOREIGN KEY (CPF_FUNCIONARIO) REFERENCES FUNCIONARIO(CPF_FUNCIONARIO) ON DELETE CASCADE
+);
+
+-- Criação da tabela Refeicao
+CREATE TABLE REFEICAO(
+    REFEICAO_ID INTEGER,
+    HORARIO TEXT,
+    DESCRICAO TEXT,
+    PRIMARY KEY(REFEICAO_ID)
+);
+
+-- Criação da tabela Cardapio
+CREATE TABLE CARDAPIO(
+     CARDAPIO_ID INTEGER,
+     NOME TEXT,
+     DATA TEXT,
+     PRIMARY KEY (CARDAPIO_ID)
+);
+
+-- Criação da tabela Preparacao
+CREATE TABLE PREPARACAO(
+    CPF_COZINHEIRA TEXT,
+    CARDAPIO_ID INTEGER,
+    REFEICAO_ID INTEGER,
+    DATA_PREPARACAO TEXT,
+    FOREIGN KEY (CPF_COZINHEIRA) REFERENCES COZINHEIRA(CPF_FUNCIONARIO),
+    FOREIGN KEY (CARDAPIO_ID) REFERENCES  CARDAPIO(CARDAPIO_ID),
+    FOREIGN KEY (REFEICAO_ID) REFERENCES REFEICAO(REFEICAO_ID)
+);
+
+
+
+-- Inserção de dados na tabela Hospede
+INSERT INTO HOSPEDE (CPF, NOME, EMAIL) VALUES
+('001.002.003-04', 'Ana Beatriz', 'ana.beatriz@example.com'),
+('005.006.007-08', 'Carlos Eduardo', 'carlos.eduardo@example.com'),
+('009.010.011-12', 'Daniela Silva', 'daniela.silva@example.com'),
+('013.014.015-16', 'Eduardo Santos', 'eduardo.santos@example.com'),
+('017.018.019-20', 'Fernanda Oliveira', 'fernanda.oliveira@example.com'),
+('021.022.023-24', 'Gabriel Costa', 'gabriel.costa@example.com'),
+('025.026.027-28', 'Helena Ribeiro', 'helena.ribeiro@example.com'),
+('029.030.031-32', 'Isabela Freitas', 'isabela.freitas@example.com'),
+('033.034.035-36', 'João Pedro', 'joao.pedro@example.com'),
+('037.038.039-40', 'Kátia Alves', 'katia.alves@example.com'),
+('041.042.043-44', 'Lucas Moraes', 'lucas.moraes@example.com'),
+('045.046.047-48', 'Mariana Lima', 'mariana.lima@example.com'),
+('049.050.051-52', 'Nícolas Martins', 'nicolas.martins@example.com'),
+('053.054.055-56', 'Olívia Gomes', 'olivia.gomes@example.com'),
+('057.058.059-60', 'Paulo Soares', 'paulo.soares@example.com'),
+('061.062.063-64', 'Quéren Hapuque', 'queren.hapuque@example.com'),
+('065.066.067-68', 'Roberto Nogueira', 'roberto.nogueira@example.com'),
+('069.070.071-72', 'Sílvia Figueiredo', 'silvia.figueiredo@example.com'),
+('073.074.075-76', 'Tiago Lopes', 'tiago.lopes@example.com'),
+('077.078.079-80', 'Úrsula Viana', 'ursula.viana@example.com');
+
+-- Inserção de dados na tabela Tipo_Quarto
+INSERT INTO TIPO_QUARTO (COD, DESCRICAO, CAPACIDADE) VALUES
+(1, 'Standard Single', 1),
+(2, 'Standard Double', 2),
+(3, 'Deluxe Single', 1),
+(4, 'Deluxe Double', 2),
+(5, 'Suite Single', 1),
+(6, 'Suite Double', 2),
+(7, 'Executive Single', 1),
+(8, 'Executive Double', 2),
+(9, 'Presidential Single', 1),
+(10, 'Presidential Double', 2),
+(11, 'Standard Triple', 3),
+(12, 'Deluxe Triple', 3),
+(13, 'Suite Triple', 3),
+(14, 'Executive Triple', 3),
+(15, 'Presidential Triple', 3),
+(16, 'Standard Quad', 4),
+(17, 'Deluxe Quad', 4),
+(18, 'Suite Quad', 4),
+(19, 'Executive Quad', 4),
+(20, 'Presidential Quad', 4);
+
+-- Inserção de dados na tabela Quarto
+INSERT INTO QUARTO (NUMERO_QUARTO, CODIGO) VALUES
+(101, 1), (102, 2), (103, 3), (104, 4), (105, 5),
+(106, 6), (107, 7), (108, 8), (109, 9), (110, 10),
+(111, 11), (112, 12), (113, 13), (114, 14), (115, 15),
+(116, 16), (117, 17), (118, 18), (119, 19), (120, 20);
+
+-- Inserção de dados na tabela Reserva
+INSERT INTO RESERVA (RESERVA_ID, HOSPEDE_CPF, NUMERO_QUARTO, CHECKIN, CHECKOUT, VALOR) VALUES
+(1, '001.002.003-04', 101, '2023-12-01', '2023-12-03', 300),
+(2, '005.006.007-08', 102, '2023-12-01', '2023-12-03', 350),
+(3, '009.010.011-12', 103, '2023-12-02', '2023-12-04', 400),
+(4, '013.014.015-16', 104, '2023-12-02', '2023-12-04', 450),
+(5, '017.018.019-20', 105, '2023-12-03', '2023-12-05', 500),
+(6, '021.022.023-24', 106, '2023-12-03', '2023-12-05', 550),
+(7, '025.026.027-28', 107, '2023-12-04', '2023-12-06', 600),
+(8, '029.030.031-32', 108, '2023-12-04', '2023-12-06', 650),
+(9, '033.034.035-36', 109, '2023-12-05', '2023-12-07', 700),
+(10, '037.038.039-40', 110, '2023-12-05', '2023-12-07', 750),
+(11, '041.042.043-44', 111, '2023-12-06', '2023-12-08', 800),
+(12, '045.046.047-48', 112, '2023-12-06', '2023-12-08', 850),
+(13, '049.050.051-52', 113, '2023-12-07', '2023-12-09', 900),
+(14, '053.054.055-56', 114, '2023-12-07', '2023-12-09', 950),
+(15, '057.058.059-60', 115, '2023-12-08', '2023-12-10', 1000),
+(16, '061.062.063-64', 116, '2023-12-08', '2023-12-10', 1050),
+(17, '065.066.067-68', 117, '2023-12-09', '2023-12-11', 1100),
+(18, '069.070.071-72', 118, '2023-12-09', '2023-12-11', 1150),
+(19, '073.074.075-76', 119, '2023-12-10', '2023-12-12', 1200),
+(20, '077.078.079-80', 120, '2023-12-10', '2023-12-12', 1250);
+
+-- Inserção de dados na tabela Funcionario
+INSERT INTO FUNCIONARIO (CPF_FUNCIONARIO, NOME, TURNO) VALUES
+('888.999.000-01', 'Marcos Antônio', 'Manhã'),
+('222.333.444-55', 'Juliana Moraes', 'Tarde'),
+('555.666.777-88', 'Roberta Silva', 'Noite'),
+('999.888.777-66', 'Carlos Junio', 'Manhã'),
+('111.222.333-44', 'Sofia Castro', 'Tarde'),
+('444.555.666-77', 'Ricardo Fontes', 'Noite'),
+('777.888.999-00', 'Patricia Novaes', 'Manhã'),
+('333.444.555-66', 'Beatriz Lemos', 'Tarde'),
+('666.777.888-99', 'Eduardo Rocha', 'Noite'),
+('000.111.222-33', 'Amanda Gomes', 'Manhã'),
+('999.000.111-22', 'Tiago Ramos', 'Tarde'),
+('888.777.666-55', 'Clara Mendes', 'Noite'),
+('777.666.555-44', 'Marcelo Dias', 'Manhã'),
+('666.555.444-33', 'Fernando Coelho', 'Tarde'),
+('555.444.333-22', 'Lúcia Carvalho', 'Noite'),
+('444.333.222-11', 'Sandro Pereira', 'Manhã'),
+('333.222.111-00', 'Renata Lima', 'Tarde'),
+('222.111.000-99', 'Paulo Souza', 'Noite'),
+('111.000.999-88', 'Marta Oliveira', 'Manhã'),
+('000.999.888-77', 'Daniel Martins', 'Tarde');
+
+-- Inserção de dados na tabela Recepcionista
+INSERT INTO RECEPCIONISTA (CPF_FUNCIONARIO, TELEFONE) VALUES
+('888.999.000-01', '(11) 1234-5678'),
+('222.333.444-55', '(11) 2345-6789'),
+('555.666.777-88', '(11) 3456-7890'),
+('999.888.777-66', '(11) 4567-8901'),
+('111.222.333-44', '(11) 5678-9012'),
+('444.555.666-77', '(11) 6789-0123'),
+('777.888.999-00', '(11) 7890-1234'),
+('333.444.555-66', '(11) 8901-2345'),
+('666.777.888-99', '(11) 9012-3456'),
+('000.111.222-33', '(11) 0123-4567'),
+('999.000.111-22', '(11) 1234-5678'),
+('888.777.666-55', '(11) 2345-6789'),
+('777.666.555-44', '(11) 3456-7890'),
+('666.555.444-33', '(11) 4567-8901'),
+('555.444.333-22', '(11) 5678-9012'),
+('444.333.222-11', '(11) 6789-0123'),
+('333.222.111-00', '(11) 7890-1234'),
+('222.111.000-99', '(11) 8901-2345'),
+('111.000.999-88', '(11) 9012-3456'),
+('000.999.888-77', '(11) 0123-4567');
+
+-- Inserção de dados na tabela Camareira
+INSERT INTO CAMAREIRA (CPF_FUNCIONARIO, DESCRICAO_TAREFA, DATA, HORA) VALUES
+('888.999.000-01', 'Limpeza quarto 101', '2023-12-01', '08:00'),
+('222.333.444-55', 'Limpeza quarto 102', '2023-12-01', '08:30'),
+('555.666.777-88', 'Limpeza quarto 103', '2023-12-01', '09:00'),
+('999.888.777-66', 'Limpeza quarto 104', '2023-12-01', '09:30'),
+('111.222.333-44', 'Limpeza quarto 105', '2023-12-01', '10:00'),
+('444.555.666-77', 'Limpeza quarto 106', '2023-12-01', '10:30'),
+('777.888.999-00', 'Limpeza quarto 107', '2023-12-01', '11:00'),
+('333.444.555-66', 'Limpeza quarto 108', '2023-12-01', '11:30'),
+('666.777.888-99', 'Limpeza quarto 109', '2023-12-01', '12:00'),
+('000.111.222-33', 'Limpeza quarto 110', '2023-12-01', '12:30'),
+('999.000.111-22', 'Limpeza quarto 111', '2023-12-01', '13:00'),
+('888.777.666-55', 'Limpeza quarto 112', '2023-12-01', '13:30'),
+('777.666.555-44', 'Limpeza quarto 113', '2023-12-01', '14:00'),
+('666.555.444-33', 'Limpeza quarto 114', '2023-12-01', '14:30'),
+('555.444.333-22', 'Limpeza quarto 115', '2023-12-01', '15:00'),
+('444.333.222-11', 'Limpeza quarto 116', '2023-12-01', '15:30'),
+('333.222.111-00', 'Limpeza quarto 117', '2023-12-01', '16:00'),
+('222.111.000-99', 'Limpeza quarto 118', '2023-12-01', '16:30'),
+('111.000.999-88', 'Limpeza quarto 119', '2023-12-01', '17:00'),
+('000.999.888-77', 'Limpeza quarto 120', '2023-12-01', '17:30');
+
+-- Inserção de dados na tabela Cozinheira
+INSERT INTO COZINHEIRA (CPF_FUNCIONARIO, ESPECIALIDADE) VALUES
+('888.999.000-01', 'Italiana'),
+('222.333.444-55', 'Mexicana'),
+('555.666.777-88', 'Francesa'),
+('999.888.777-66', 'Japonesa'),
+('111.222.333-44', 'Brasileira'),
+('444.555.666-77', 'Indiana'),
+('777.888.999-00', 'Chinesa'),
+('333.444.555-66', 'Alemã'),
+('666.777.888-99', 'Espanhola'),
+('000.111.222-33', 'Coreana'),
+('999.000.111-22', 'Vietnamita'),
+('888.777.666-55', 'Tailandesa'),
+('777.666.555-44', 'Grega'),
+('666.555.444-33', 'Turca'),
+('555.444.333-22', 'Argelina'),
+('444.333.222-11', 'Sul-Africana'),
+('333.222.111-00', 'Portuguesa'),
+('222.111.000-99', 'Russo'),
+('111.000.999-88', 'Peruana'),
+('000.999.888-77', 'Australiana');
+
+-- Inserção de dados na tabela Refeicao
+INSERT INTO REFEICAO (REFEICAO_ID, HORARIO, DESCRICAO) VALUES
+(1, '07:00', 'Café da manhã'),
+(2, '12:00', 'Almoço Executivo'),
+(3, '19:00', 'Jantar de Gala'),
+(4, '09:00', 'Brunch'),
+(5, '13:00', 'Almoço Casual'),
+(6, '20:00', 'Jantar Casual'),
+(7, '08:00', 'Café Continental'),
+(8, '14:00', 'Almoço Buffet'),
+(9, '21:00', 'Jantar Buffet'),
+(10, '07:30', 'Café da manhã Light'),
+(11, '12:30', 'Almoço de Negócios'),
+(12, '19:30', 'Jantar Romântico'),
+(13, '10:00', 'Lanche da Manhã'),
+(14, '15:00', 'Almoço Tardio'),
+(15, '22:00', 'Ceia'),
+(16, '06:00', 'Café Madrugador'),
+(17, '11:00', 'Brunch de Domingo'),
+(18, '18:00', 'Jantar de Despedida'),
+(19, '09:30', 'Café Reforçado'),
+(20, '16:00', 'Chá da Tarde');
+
+-- Inserção de dados na tabela Cardapio
+INSERT INTO CARDAPIO (CARDAPIO_ID, NOME, DATA) VALUES
+(1, 'Menu do Dia 1', '2023-12-01'),
+(2, 'Menu do Dia 2', '2023-12-02'),
+(3, 'Menu do Dia 3', '2023-12-03'),
+(4, 'Menu do Dia 4', '2023-12-04'),
+(5, 'Menu do Dia 5', '2023-12-05'),
+(6, 'Menu do Dia 6', '2023-12-06'),
+(7, 'Menu do Dia 7', '2023-12-07'),
+(8, 'Menu do Dia 8', '2023-12-08'),
+(9, 'Menu do Dia 9', '2023-12-09'),
+(10, 'Menu do Dia 10', '2023-12-10'),
+(11, 'Menu Especial 1', '2023-12-11'),
+(12, 'Menu Especial 2', '2023-12-12'),
+(13, 'Menu Especial 3', '2023-12-13'),
+(14, 'Menu Especial 4', '2023-12-14'),
+(15, 'Menu Especial 5', '2023-12-15'),
+(16, 'Menu Temático 1', '2023-12-16'),
+(17, 'Menu Temático 2', '2023-12-17'),
+(18, 'Menu Temático 3', '2023-12-18'),
+(19, 'Menu Temático 4', '2023-12-19'),
+(20, 'Menu Temático 5', '2023-12-20');
+
+-- Inserção de dados na tabela Preparacao
+INSERT INTO PREPARACAO (CPF_COZINHEIRA, CARDAPIO_ID, REFEICAO_ID, DATA_PREPARACAO) VALUES
+('888.999.000-01', 1, 1, '2023-12-01'),
+('222.333.444-55', 2, 2, '2023-12-02'),
+('555.666.777-88', 3, 3, '2023-12-03'),
+('999.888.777-66', 4, 4, '2023-12-04'),
+('111.222.333-44', 5, 5, '2023-12-05'),
+('444.555.666-77', 6, 6, '2023-12-06'),
+('777.888.999-00', 7, 7, '2023-12-07'),
+('333.444.555-66', 8, 8, '2023-12-08'),
+('666.777.888-99', 9, 9, '2023-12-09'),
+('000.111.222-33', 10, 10, '2023-12-10'),
+('999.000.111-22', 11, 11, '2023-12-11'),
+('888.777.666-55', 12, 12, '2023-12-12'),
+('777.666.555-44', 13, 13, '2023-12-13'),
+('666.555.444-33', 14, 14, '2023-12-14'),
+('555.444.333-22', 15, 15, '2023-12-15'),
+('444.333.222-11', 16, 16, '2023-12-16'),
+('333.222.111-00', 17, 17, '2023-12-17'),
+('222.111.000-99', 18, 18, '2023-12-18'),
+('111.000.999-88', 19, 19, '2023-12-19'),
+('000.999.888-77', 20, 20, '2023-12-20');
+
